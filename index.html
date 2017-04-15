@@ -1,16 +1,77 @@
-<h1>oi lucysdgfasdfgasdfg ya big goon</h1>
+<html>
 
-<p>vell</p>
-<p>trolololol</p>
-<p>can i draw you naked</p>
-<p>where did the bear go</p>
-<p>dicks are cool</p>
-<p>mulgreeby</p>
-<p>i've got an immune system</p>
-<p>chil-lay-lay</p>
-<p>i tried to in 2004 but my neck</p>
-<p>fucking milk</p>
-<p>hair grows back thicker if you shave it</p>
-<p>the naked game</p>
-<p>i'm throwing up blood</p>
-<p>dunno bout you guys, but i aint got class tomorrow</p>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: black;
+      }
+
+      canvas {
+        display: block;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <canvas id="c">
+    </canvas>
+
+    <script>
+      var c = document.getElementById("c")
+      var ctx = c.getContext("2d")
+      c.height = window.innerHeight
+      c.width = window.innerWidth
+
+      //Chinese Characters - taken from the unicode character set
+
+      var matrix = "1 2 3 4 5 6 7 8 9"
+      matrix = matrix.split(" ")
+      var font_size = 23
+      var columns = c.width / font_size
+
+      var drops = [];
+      for (var x = 0; x < columns; x++)
+      {
+        drops[x] = 1
+      }
+
+      function draw() {
+        ctx.fillStyle = "rgba(0,0,0,.2)"
+        ctx.fillRect(0, 0, c.width, c.height)
+
+        function getRandomColor() {
+          var letters = '0123456789ABCDEF'
+          var color = '#'
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)]
+          }
+          return color
+        }
+        ctx.fillStyle = getRandomColor()
+
+
+        ctx.font = font_size + "px Courier New"
+
+        for (var i = 0; i < drops.length; i++)
+        {
+          var text = matrix[Math.floor(Math.random() * matrix.length)]
+          ctx.fillText(text, font_size * i, drops[i] * font_size)
+
+          if (drops[i] * font_size > c.height && Math.random() > 0.95) {
+            drops[i] = 0
+          }
+          drops[i]++
+        }
+      }
+
+      setInterval(draw, 100)
+
+    </script>
+  </body>
+</html>
