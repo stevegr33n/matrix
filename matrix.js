@@ -1,45 +1,71 @@
-var c = document.getElementById("c");
-var ctx = c.getContext("2d");
+'use strict'
+const CHARS = '$,\xA5,\u2665'.split(',')
+const FONTSIZE = 30
 
-c.height = window.innerHeight;
-c.width = window.innerWidth;
-
-var matrix = [1,2,3,4,5,6,7,8,9,
-              '漢','字','吧','爸',
-              '八','百','北','不']
-var font_size = 20;
-var columns = (c.width / font_size) * 20;
+var canvas = document.getElementById("canvas")
+var ctx = canvas.getContext("2d")
+var columns = ((canvas.width / FONTSIZE) * FONTSIZE)
+var drawInterval
 
 var drops = [];
 for (var x = 0; x < columns; x++) {
-  drops[x] = 1;
+    drops[x] = 1;
 }
 
+window.addEventListener('resize', resizeWindow, false)
+
+function resizeWindow () {
+  setClearInterval()
+  updateCanvasSize()
+  setDrawInterval()
+}
+function setClearInterval () {
+  clearInterval(drawInterval)
+}
+function setDrawInterval () {
+  drawInterval = setInterval(draw, 120)
+}
+function updateCanvasSize () {
+  canvas.height = window.innerHeight
+  canvas.width = window.innerWidth
+}
+
+
+
+// console.log('3', canvas)
 function draw() {
-  ctx.fillStyle = "rgba(0,0,0,.1)";
-  ctx.fillRect(0, 0, c.width, c.height);
+  // console.log('x', canvas)
+  // updateCanvasSize()
+// console.log('2',canvas)
+    // window.setInterval(updateCanvasSize, 510);
 
-  function getRandomColor() {
-    var letters = '9ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 7)];
+
+
+    // function getRandomColor() {
+    //     var letters = '9ABCDEF';
+    //     var color = '#';
+    //     for (var i = 0; i < 6; i++) {
+    //         color += letters[Math.floor(Math.random() * 7)];
+    //     }
+    //     return color;
+    // }
+    // ctx.fillStyle = getRandomColor();
+    ctx.fillStyle = '#999999';
+    ctx.font = FONTSIZE + "px Courier New";
+
+    for (var i = 0; i < drops.length; i++) {
+        var text = CHARS[Math.floor(Math.random() * CHARS.length)];
+        //console.log(text, FONTSIZE * i, drops[i] * FONTSIZE)
+        ctx.fillText(text, FONTSIZE * i, drops[i] * FONTSIZE);
+
+        if (drops[i] * FONTSIZE > canvas.height && Math.random() > 0.95) {
+            drops[i] = 0;
+        }
+        drops[i] += 1.1;
     }
-    return color;
-  }
-  ctx.fillStyle = getRandomColor();
-  ctx.font = font_size + "px Courier New";
+    ctx.fillStyle = "rgba(0,0,0,.1)";
 
-  for (var i = 0; i < drops.length; i++)
-  {
-    var text = matrix[Math.floor(Math.random() * matrix.length)];
-    //console.log(text, font_size * i, drops[i] * font_size)
-    ctx.fillText(text, font_size + 3 * i, drops[i] * font_size);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (drops[i] * font_size > c.height && Math.random() > 0.95) {
-      drops[i] = 0;
-    }
-    drops[i]+=1.1;
-  }
 }
-setInterval(draw, 110);
+init()
