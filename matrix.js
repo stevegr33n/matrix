@@ -3,8 +3,9 @@ const SYMBOLS = '$,\xA5,\u2665'.split(',')
 const FONTSIZE = 30
 var drops = []
 
-var canvas = document.getElementById("canvas")
-var ctx = canvas.getContext("2d")
+const CANVAS = document.getElementById("canvas")
+const CTX = CANVAS.getContext("2d")
+const DRAWSPEED = 115
 var drawInterval = 0
 
 ;(function init() {
@@ -19,57 +20,72 @@ function updateCanvas () {
   setSymbolPositions()
   setDrawInterval()
 }
+
 function setClearInterval () {
   clearInterval(drawInterval)
 }
+
 function getCanvasSize () {
-  canvas.height = window.innerHeight
-  canvas.width = window.innerWidth
+  CANVAS.height = window.innerHeight
+  CANVAS.width = window.innerWidth
 }
+
 function setFont() {
-  ctx.font = FONTSIZE + "px Courier New"
+  CTX.font = FONTSIZE + "px Courier New"
 }
+
 function setDrawInterval () {
-  drawInterval = setInterval(draw, 115)
+  drawInterval = setInterval(drawSymbols, DRAWSPEED)
 }
+
 function getRandomChar () {
-  return SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
+  return SYMBOLS[randomNumber(SYMBOLS.length)]
 }
+
 function numOfColumns () {
-  return Math.round(canvas.width / FONTSIZE)
+  return Math.round(CANVAS.width / FONTSIZE)
 }
+
+function randomNumber(max) {
+  /*
+   * Returns random number between 0
+   * and max.
+  */
+  return Math.floor(Math.random() * max)
+}
+
 function setSymbolPositions() {
   for (var i = 0; i < numOfColumns(); i++) {
-    drops[i] = 1
+    drops[i] = randomNumber(FONTSIZE)
   }
   // console.log('(((',drops)
   console.log('(((',drops)
   console.log(numOfColumns())
-  console.log(canvas.width)
-
+  console.log(CANVAS.width)
 }
+
 function getRandomHexCode() {
     var chars = '9ABCDEF'
     var hexCode = '#'
     for (var i = 0; i < chars.length; i++) {
-        hexCode += chars[Math.floor(Math.random() * chars.length)]
+        hexCode += chars[randomNumber(chars.length)]
     }
     return color
 }
-function draw() {
-  // ctx.fillStyle = getRandomColor();
-  ctx.fillStyle = '#999999'
+
+function drawSymbols() {
+  // CTX.fillStyle = getRandomColor();
+  CTX.fillStyle = '#999999'
   for (var i = 0; i < drops.length; i++)  {
-    var symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
+    var symbol = SYMBOLS[randomNumber(SYMBOLS.length)]
+    CTX.fillText(symbol, FONTSIZE * i, drops[i] * FONTSIZE)
 
-    ctx.fillText(symbol, FONTSIZE * i, drops[i] * FONTSIZE)
-
-    if (drops[i] * FONTSIZE > canvas.height && Math.random() > 0.95) {
-      console.log(drops[i] * FONTSIZE)
+    if (drops[i] * FONTSIZE > CANVAS.height && Math.random() > 0.95) {
+      // console.log(drops[i] * FONTSIZE)
       drops[i] = 0;
     }
-    drops[i]+=1
-}
-ctx.fillStyle = "rgba(0,0,0,.1)"
-ctx.fillRect(0, 0, canvas.width, canvas.height)
+    drops[i] += 1
+  }
+  CTX.fillStyle = "rgba(0,0,0,.1)"
+  CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
 }
