@@ -5,16 +5,14 @@ const FONTSIZE = 30
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext("2d")
 var columns = ((canvas.width / FONTSIZE) * FONTSIZE)
-var drawInterval
+var drawInterval = 0
 
-var drops = [];
-for (var x = 0; x < columns; x++) {
-    drops[x] = 1;
-}
+document.onload = updateCanvas()
+window.addEventListener('resize', updateCanvas, false)
 
-window.addEventListener('resize', resizeWindow, false)
 
-function resizeWindow () {
+
+function updateCanvas () {
   setClearInterval()
   updateCanvasSize()
   setDrawInterval()
@@ -30,16 +28,12 @@ function updateCanvasSize () {
   canvas.width = window.innerWidth
 }
 
+var drops = [];
+for (var x = 0; x < columns; x++) {
+    drops[x] = 1;
+}
 
-
-// console.log('3', canvas)
 function draw() {
-  // console.log('x', canvas)
-  // updateCanvasSize()
-// console.log('2',canvas)
-    // window.setInterval(updateCanvasSize, 510);
-
-
 
     // function getRandomColor() {
     //     var letters = '9ABCDEF';
@@ -68,4 +62,3 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 }
-init()
