@@ -1,1 +1,2 @@
-# the entire 迷ってしまいました。mоё судно на воздушной подушке полно угрей
+# matrix-esque screensaver written in vanilla javascript
+# open index.html in a browser.
