@@ -4,8 +4,8 @@
   "description": "like code from the matrix",
   "main": "matrix.js",
   "scripts": {
-    "build": "browserify matrix.js -o dist/bundle.js",
-    "watch": "watchify matrix.js -o dist/bundle.js -v"
+    "build": "browserify matrix.js -o bundle.js",
+    "watch": "watchify matrix.js -o bundle.js -v"
   },
   "repository": {
     "type": "git",

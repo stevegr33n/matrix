@@ -114,20 +114,28 @@ var MatrixService = function () {
 			}
 		}
 	}, {
-		key: 'drawSymbols',
-		value: function drawSymbols() {
+		key: 'getRandomHexCode',
+		value: function getRandomHexCode() {
 			var _this2 = this;
 
-			this.ctx.fillStyle = '#993359';
-			// ctx.fillStyle = getRandomHexCode();
-			console.log(this.drawInterval);
+			var chars = ["9", "9", "3", "3", "5", "9"];
+			return chars.reduce(function (res, _) {
+				return res + chars[_this2.randomInt(chars.length)];
+			}, '#');
+		}
+	}, {
+		key: 'drawSymbols',
+		value: function drawSymbols() {
+			var _this3 = this;
+
+			this.ctx.fillStyle = this.getRandomHexCode();
 			this.yPositions.forEach(function (yPos, index, yPositions) {
-				_this2.fillText({
-					symbol: _this2.symbols[_this2.randomInt(_this2.symbols.length)],
-					xPos: _this2.fontSize * index,
-					yPos: yPos * _this2.fontSize
+				_this3.fillText({
+					symbol: _this3.symbols[_this3.randomInt(_this3.symbols.length)],
+					xPos: _this3.fontSize * index,
+					yPos: yPos * _this3.fontSize
 				});
-				_this2.isYPosGreaterThanCanvasHeight && _this2.randomBool() ? yPositions[index] = 0 : yPositions[index] += 1;
+				_this3.isYPosGreaterThanCanvasHeight && _this3.randomBool() ? yPositions[index] = 0 : yPositions[index] += 1;
 			});
 			this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
 			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -139,15 +147,6 @@ var MatrixService = function () {
 
 // function getRandomHexCode() {
 //     let chars = 'AB999F'
-//     let hexCode = '#'
-//     for (let i = 0; i < chars.length; i++) {
-//         hexCode += chars[randomInt(chars.length)]
-//     }
-//     console.log(hexCode)
-//     return hexCode
-// }
-// function getRandomRedHexCode() {
-//     let chars = '993359'
 //     let hexCode = '#'
 //     for (let i = 0; i < chars.length; i++) {
 //         hexCode += chars[randomInt(chars.length)]

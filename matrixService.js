@@ -52,10 +52,13 @@ export default class MatrixService {
 		}
 	}
 
+	getRandomHexCode() {
+		const chars = ["9", "9", "3", "3", "5", "9"]
+		return chars.reduce((res, _) => res + chars[this.randomInt(chars.length)], '#')
+	}
+
 	drawSymbols() {
-		this.ctx.fillStyle = '#993359'
-		// ctx.fillStyle = getRandomHexCode();
-		console.log(this.drawInterval)
+		this.ctx.fillStyle = this.getRandomHexCode();
 		this.yPositions.forEach((yPos, index, yPositions) => {
 			this.fillText({
 				symbol: this.symbols[this.randomInt(this.symbols.length)],
@@ -78,12 +81,5 @@ export default class MatrixService {
 //     console.log(hexCode)
 //     return hexCode
 // }
-// function getRandomRedHexCode() {
-//     let chars = '993359'
-//     let hexCode = '#'
-//     for (let i = 0; i < chars.length; i++) {
-//         hexCode += chars[randomInt(chars.length)]
-//     }
-//     console.log(hexCode)
-//     return hexCode
-// }
+
+
