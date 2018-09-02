@@ -10,12 +10,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var matrix = new _matrixService2.default({ canvas: canvas, ctx: ctx });
-window.addEventListener('resize', updateCanvas, false);
+window.addEventListener('resize', updateCanvas);
 
 function updateCanvas() {
   matrix.getCanvasSize();
   matrix.setFont();
-  matrix.setRandomSymbolStartYPositions();
+  matrix.setSymbolStartYPositions();
 }
 
 function initCanvas() {
@@ -47,8 +47,7 @@ var MatrixService = function () {
 		this.ctx = ctx;
 		this.drawInterval = 115;
 		this.fontSize = 40;
-		this.symbols = '$,\xA5,\u2665'.split(',');
-		this.yPositions = [];
+		this.symbols = ['$', '\xA5', '\u2665'];
 	}
 
 	_createClass(MatrixService, [{
@@ -99,15 +98,15 @@ var MatrixService = function () {
 	}, {
 		key: 'fillText',
 		value: function fillText(_ref2) {
-			var symbol = _ref2.symbol,
+			var randomSymbol = _ref2.randomSymbol,
 			    xPos = _ref2.xPos,
 			    yPos = _ref2.yPos;
 
-			this.ctx.fillText(symbol, xPos, yPos);
+			this.ctx.fillText(randomSymbol, xPos, yPos);
 		}
 	}, {
-		key: 'setRandomSymbolStartYPositions',
-		value: function setRandomSymbolStartYPositions() {
+		key: 'setSymbolStartYPositions',
+		value: function setSymbolStartYPositions() {
 			this.yPositions = [];
 			for (var i = 0; i < this.getNumOfColumns(); i++) {
 				this.yPositions[i] = this.randomInt(this.fontSize);
@@ -131,30 +130,24 @@ var MatrixService = function () {
 			this.ctx.fillStyle = this.getRandomHexCode();
 			this.yPositions.forEach(function (yPos, index, yPositions) {
 				_this3.fillText({
-					symbol: _this3.symbols[_this3.randomInt(_this3.symbols.length)],
+					randomSymbol: _this3.symbols[_this3.randomInt(_this3.symbols.length)],
 					xPos: _this3.fontSize * index,
 					yPos: yPos * _this3.fontSize
 				});
 				_this3.isYPosGreaterThanCanvasHeight && _this3.randomBool() ? yPositions[index] = 0 : yPositions[index] += 1;
 			});
-			this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
+			if (!this.randomBool()) this.fadeOutSymbols();
+		}
+	}, {
+		key: 'fadeOutSymbols',
+		value: function fadeOutSymbols() {
+			this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
 			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		}
 	}]);
 
 	return MatrixService;
 }();
-
-// function getRandomHexCode() {
-//     let chars = 'AB999F'
-//     let hexCode = '#'
-//     for (let i = 0; i < chars.length; i++) {
-//         hexCode += chars[randomInt(chars.length)]
-//     }
-//     console.log(hexCode)
-//     return hexCode
-// }
-
 
 exports.default = MatrixService;
 

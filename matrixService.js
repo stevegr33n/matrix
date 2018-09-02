@@ -4,8 +4,7 @@ export default class MatrixService {
 		this.ctx = ctx
 		this.drawInterval = 115
 		this.fontSize = 40
-		this.symbols = '$,\xA5,\u2665'.split(',')
-		this.yPositions = []
+		this.symbols = ['$', '\xA5', '\u2665']
 	}
 
 	getCanvasSize () {
@@ -22,7 +21,7 @@ export default class MatrixService {
 	}
 
 	setFont() {
-		this.ctx.font = this.fontSize + 'px Courier New'
+		this.ctx.font = `${this.fontSize}px Courier New`
 	}
 	
 	getRandomChar () {
@@ -41,11 +40,11 @@ export default class MatrixService {
 		return yPos * this.fontSize > this.canvas.height
 	}
 	
-	fillText({ symbol, xPos, yPos }) {
-		this.ctx.fillText(symbol, xPos, yPos);
+	fillText({ randomSymbol, xPos, yPos }) {
+		this.ctx.fillText(randomSymbol, xPos, yPos);
 	}
 
-	setRandomSymbolStartYPositions() {
+	setSymbolStartYPositions() {
 		this.yPositions = []
 		for (let i = 0; i < this.getNumOfColumns(); i++) {
 			this.yPositions[i] = this.randomInt(this.fontSize)
@@ -61,25 +60,17 @@ export default class MatrixService {
 		this.ctx.fillStyle = this.getRandomHexCode();
 		this.yPositions.forEach((yPos, index, yPositions) => {
 			this.fillText({
-				symbol: this.symbols[this.randomInt(this.symbols.length)],
+				randomSymbol: this.symbols[this.randomInt(this.symbols.length)],
 				xPos: this.fontSize * index,
 				yPos: yPos * this.fontSize
 			});
 			this.isYPosGreaterThanCanvasHeight && this.randomBool() ?  yPositions[index] = 0 : yPositions[index] += 1;
 		})
-		this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		if (!this.randomBool()) this.fadeOutSymbols()
+	}
+
+	fadeOutSymbols() {
+		this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 	}
 }
-
-// function getRandomHexCode() {
-//     let chars = 'AB999F'
-//     let hexCode = '#'
-//     for (let i = 0; i < chars.length; i++) {
-//         hexCode += chars[randomInt(chars.length)]
-//     }
-//     console.log(hexCode)
-//     return hexCode
-// }
-
-
