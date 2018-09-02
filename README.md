@@ -1,6 +1,5 @@
 # https://bashcandicoot.github.io/
 
-matrix-esque screensaver written in vanilla javascript
-open index.html in a browser.
+matrix-esque screensaver written in vanilla javascript  
 
 ![alt text](screenCapture.gif)
