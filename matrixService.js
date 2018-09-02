@@ -4,7 +4,9 @@ export default class MatrixService {
 		this.ctx = ctx
 		this.drawInterval = 115
 		this.fontSize = 40
+		this.fontGap = 20
 		this.symbols = ['$', '\xA5', '\u2665']
+		this.mousePos = {}
 	}
 
 	getCanvasSize () {
@@ -52,8 +54,10 @@ export default class MatrixService {
 	}
 
 	getRandomHexCode() {
-		const chars = ["9", "9", "3", "3", "5", "9"]
+		const chars = ['3', '3', '5', '9', '9', '9']
+		// const x = `#${this.mousePos.x}${this.mousePos.y}`
 		return chars.reduce((res, _) => res + chars[this.randomInt(chars.length)], '#')
+
 	}
 
 	drawSymbols() {
@@ -62,7 +66,7 @@ export default class MatrixService {
 			this.fillText({
 				randomSymbol: this.symbols[this.randomInt(this.symbols.length)],
 				xPos: this.fontSize * index,
-				yPos: yPos * this.fontSize
+				yPos: yPos * (this.fontSize + this.fontGap)
 			});
 			this.isYPosGreaterThanCanvasHeight && this.randomBool() ?  yPositions[index] = 0 : yPositions[index] += 1;
 		})
@@ -73,4 +77,5 @@ export default class MatrixService {
 		this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 	}
+
 }

@@ -10,7 +10,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var matrix = new _matrixService2.default({ canvas: canvas, ctx: ctx });
-window.addEventListener('resize', updateCanvas);
+window.addEventListener('resize', updateCanvas, false);
+window.addEventListener('mousemove', mouseMove, false);
 
 function updateCanvas() {
   matrix.getCanvasSize();
@@ -22,6 +23,21 @@ function initCanvas() {
   updateCanvas();
   matrix.drawSymbolsInterval();
 };
+
+function mouseMove(event) {
+  getMousePos({ canvas: canvas, event: event }, matrix);
+}
+
+function getMousePos(_ref, matrix) {
+  var canvas = _ref.canvas,
+      event = _ref.event;
+
+  var rect = canvas.getBoundingClientRect();
+  matrix.mousePos = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
 
 initCanvas();
 
@@ -47,7 +63,9 @@ var MatrixService = function () {
 		this.ctx = ctx;
 		this.drawInterval = 115;
 		this.fontSize = 40;
+		this.fontGap = 20;
 		this.symbols = ['$', '\xA5', '\u2665'];
+		this.mousePos = {};
 	}
 
 	_createClass(MatrixService, [{
@@ -117,7 +135,8 @@ var MatrixService = function () {
 		value: function getRandomHexCode() {
 			var _this2 = this;
 
-			var chars = ["9", "9", "3", "3", "5", "9"];
+			var chars = ['3', '3', '5', '9', '9', '9'];
+			// const x = `#${this.mousePos.x}${this.mousePos.y}`
 			return chars.reduce(function (res, _) {
 				return res + chars[_this2.randomInt(chars.length)];
 			}, '#');
@@ -132,7 +151,7 @@ var MatrixService = function () {
 				_this3.fillText({
 					randomSymbol: _this3.symbols[_this3.randomInt(_this3.symbols.length)],
 					xPos: _this3.fontSize * index,
-					yPos: yPos * _this3.fontSize
+					yPos: yPos * (_this3.fontSize + _this3.fontGap)
 				});
 				_this3.isYPosGreaterThanCanvasHeight && _this3.randomBool() ? yPositions[index] = 0 : yPositions[index] += 1;
 			});
