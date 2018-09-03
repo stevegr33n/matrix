@@ -7,6 +7,7 @@ export default class MatrixService {
 		this.fontGap = 20
 		this.symbols = ['$', '\xA5', '\u2665']
 		this.mousePos = {}
+		this.spacebarPressed = false
 	}
 
 	getCanvasSize () {
@@ -54,14 +55,29 @@ export default class MatrixService {
 	}
 
 	getRandomHexCode() {
-		const chars = ['3', '3', '5', '9', '9', '9']
-		// const x = `#${this.mousePos.x}${this.mousePos.y}`
+		const chars = ['9', '9', '3', '3', '5', '9']
 		return chars.reduce((res, _) => res + chars[this.randomInt(chars.length)], '#')
+		
+		const halfWindowHeight = this.canvas.height / 2
+		const halfWindowWidth = this.canvas.width / 2
+		
+		// if(this.mousePos.y < halfWindowHeight) return '#993359'
+		// if(this.mousePos.y > halfWindowHeight) return '#111111'
+		
+		// if(this.mousePos.x > halfWindowWidth) this.fontSize = 80
+		// this.setFont()
+		// console.log(this.mousePos.x > halfWindowWidth)
 
 	}
 
+	mouseHasNotMoved() {
+		return true
+	}
+
 	drawSymbols() {
-		this.ctx.fillStyle = this.getRandomHexCode();
+		if (this.mouseHasNotMoved) this.ctx.fillStyle = this.getRandomHexCode();
+		else { this.ctx.fillStyle = this.getHexCodeFromMousePos(); }
+
 		this.yPositions.forEach((yPos, index, yPositions) => {
 			this.fillText({
 				randomSymbol: this.symbols[this.randomInt(this.symbols.length)],
@@ -74,7 +90,11 @@ export default class MatrixService {
 	}
 
 	fadeOutSymbols() {
-		this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
+		if (this.spacebarPressed) {
+			this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+		} else { 
+			this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
+		}
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 	}
 

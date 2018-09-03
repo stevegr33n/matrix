@@ -12,6 +12,7 @@ var ctx = canvas.getContext('2d');
 var matrix = new _matrixService2.default({ canvas: canvas, ctx: ctx });
 window.addEventListener('resize', updateCanvas, false);
 window.addEventListener('mousemove', mouseMove, false);
+window.addEventListener("keypress", spacebarHasBeenPressed, false);
 
 function updateCanvas() {
   matrix.getCanvasSize();
@@ -36,6 +37,17 @@ function getMousePos(_ref, matrix) {
   matrix.mousePos = {
     x: event.clientX - rect.left,
     y: event.clientY - rect.top
+  };
+}
+
+function spacebarHasBeenPressed() {
+  document.body.onkeyup = function (e) {
+    if (e.keyCode === 32) {
+      matrix.spacebarPressed = !matrix.spacebarPressed;
+      var backgroundFill = matrix.spacebarPressed ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)';
+      matrix.ctx.fillStyle = backgroundFill;
+      matrix.ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
   };
 }
 
@@ -66,6 +78,7 @@ var MatrixService = function () {
 		this.fontGap = 20;
 		this.symbols = ['$', '\xA5', '\u2665'];
 		this.mousePos = {};
+		this.spacebarPressed = false;
 	}
 
 	_createClass(MatrixService, [{
@@ -135,18 +148,35 @@ var MatrixService = function () {
 		value: function getRandomHexCode() {
 			var _this2 = this;
 
-			var chars = ['3', '3', '5', '9', '9', '9'];
-			// const x = `#${this.mousePos.x}${this.mousePos.y}`
+			var chars = ['9', '9', '3', '3', '5', '9'];
 			return chars.reduce(function (res, _) {
 				return res + chars[_this2.randomInt(chars.length)];
 			}, '#');
+
+			var halfWindowHeight = this.canvas.height / 2;
+			var halfWindowWidth = this.canvas.width / 2;
+
+			// if(this.mousePos.y < halfWindowHeight) return '#993359'
+			// if(this.mousePos.y > halfWindowHeight) return '#111111'
+
+			// if(this.mousePos.x > halfWindowWidth) this.fontSize = 80
+			// this.setFont()
+			// console.log(this.mousePos.x > halfWindowWidth)
+		}
+	}, {
+		key: 'mouseHasNotMoved',
+		value: function mouseHasNotMoved() {
+			return true;
 		}
 	}, {
 		key: 'drawSymbols',
 		value: function drawSymbols() {
 			var _this3 = this;
 
-			this.ctx.fillStyle = this.getRandomHexCode();
+			if (this.mouseHasNotMoved) this.ctx.fillStyle = this.getRandomHexCode();else {
+				this.ctx.fillStyle = this.getHexCodeFromMousePos();
+			}
+
 			this.yPositions.forEach(function (yPos, index, yPositions) {
 				_this3.fillText({
 					randomSymbol: _this3.symbols[_this3.randomInt(_this3.symbols.length)],
@@ -160,7 +190,11 @@ var MatrixService = function () {
 	}, {
 		key: 'fadeOutSymbols',
 		value: function fadeOutSymbols() {
-			this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+			if (this.spacebarPressed) {
+				this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+			} else {
+				this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+			}
 			this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		}
 	}]);
