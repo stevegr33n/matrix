@@ -24,17 +24,24 @@ stages:
   
 - stage: UnitTests
   displayName: 'Unit Tests'
+  dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
   jobs:
-  - job: TestOnWindows
+  - job: TestWin
     displayName: 'Test on Windows'
+    
     timeoutInMinutes: 1
     steps:
       - script: echo Testing on Windows!
-  - job: TestOnLinux
+  - job: TestLin
     displayName: 'Test on Linux'
     timeoutInMinutes: 1
     steps:
       - script: echo Testing on Linux!
+  - job: TestMac
+    displayName: 'Test on Mac'
+    timeoutInMinutes: 1
+    steps:
+      - script: echo Testing on Mac!
 
 - stage: Publish
   jobs:
