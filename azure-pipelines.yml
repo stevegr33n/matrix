@@ -5,34 +5,52 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: CheckoutSCM
-  displayName: 'Checkout SCM'
+- stage: Build
   jobs:
   - job: Checkout
     timeoutInMinutes: 1
     steps:
     - script: echo Checking out!
 
-- stage: GitWorkFlow
-  displayName: 'Git Workflow'
+- stage: CustomCodeCheck
+  displayName: 'Custom Code Check'
   jobs:
-  - job: Workflow
-    displayName: 'Checkout SCM'
+  - job: Check
     timeoutInMinutes: 1
     steps:
-    - script: echo Workflow!
+    - script: echo Check!
+
+- stage: StandardValidation
+  displayName: 'Standard Validation'
+  jobs:
+  - job: Validation
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Validation!
   
-- stage: UnitTests
-  displayName: 'Unit Tests'
+- stage: Package
+  jobs:
+  - job: Package
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Package!
+
+- stage: Publish
+  jobs:
+  - job: Publish
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Publish!
+  
+- stage: Test
   dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
   jobs:
   - job: TestWin
     displayName: 'Test on Windows'
-    
     timeoutInMinutes: 1
     steps:
       - script: echo Testing on Windows!
-  - job: TestLin
+  - job: TestLinux
     displayName: 'Test on Linux'
     timeoutInMinutes: 1
     steps:
@@ -43,17 +61,9 @@ stages:
     steps:
       - script: echo Testing on Mac!
 
-- stage: Publish
+- stage: Notification
   jobs:
-  - job: Deploy
+  - job: Notification
     timeoutInMinutes: 1
     steps:
-    - script: echo Deploying the code!
-
-- stage: PostActions
-  displayName: 'Post Actions'
-  jobs:
-  - job: Actions
-    timeoutInMinutes: 1
-    steps:
-    - script: echo Actions!
+    - script: echo Notification!
