@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: Checkout SCM
+- stage: CheckoutSCM
   jobs:
   - job: Checkout
     steps:
@@ -17,7 +17,7 @@ stages:
     steps:
     - script: echo Workflow!
   
-- stage: Unit Tests
+- stage: UnitTests
   jobs:
   - job: TestOnWindows
     steps:
@@ -32,7 +32,7 @@ stages:
     steps:
     - script: echo Deploying the code!
 
-- stage: Post Actions
+- stage: PostActions
   jobs:
   - job: Actions
     steps:
