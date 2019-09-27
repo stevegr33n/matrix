@@ -1,19 +1,39 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: Checkout SCM
+  jobs:
+  - job: Checkout
+    steps:
+    - script: echo Checking out!
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- stage: GitWorkFlow
+  jobs:
+  - job: Workflow
+    steps:
+    - script: echo Workflow!
+  
+- stage: Unit Tests
+  jobs:
+  - job: TestOnWindows
+    steps:
+      - script: echo Testing on Windows!
+  - job: TestOnLinux
+    steps:
+      - script: echo Testing on Linux!
+
+- stage: Publish
+  jobs:
+  - job: Deploy
+    steps:
+    - script: echo Deploying the code!
+
+- stage: Post Actions
+  jobs:
+  - job: Actions
+    steps:
+    - script: echo Actions!
