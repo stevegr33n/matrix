@@ -6,34 +6,47 @@ pool:
 
 stages:
 - stage: CheckoutSCM
+  displayName: 'Checkout SCM'
   jobs:
   - job: Checkout
+    timeoutInMinutes: 1
     steps:
     - script: echo Checking out!
 
 - stage: GitWorkFlow
+  displayName: 'Git Workflow'
   jobs:
   - job: Workflow
+    displayName: 'Checkout SCM'
+    timeoutInMinutes: 1
     steps:
     - script: echo Workflow!
   
 - stage: UnitTests
+  displayName: 'Unit Tests'
   jobs:
   - job: TestOnWindows
+    displayName: 'Test on Windows'
+    timeoutInMinutes: 1
     steps:
       - script: echo Testing on Windows!
   - job: TestOnLinux
+    displayName: 'Test on Linux'
+    timeoutInMinutes: 1
     steps:
       - script: echo Testing on Linux!
 
 - stage: Publish
   jobs:
   - job: Deploy
+    timeoutInMinutes: 1
     steps:
     - script: echo Deploying the code!
 
 - stage: PostActions
+  displayName: 'Post Actions'
   jobs:
   - job: Actions
+    timeoutInMinutes: 1
     steps:
     - script: echo Actions!
