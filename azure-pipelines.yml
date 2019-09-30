@@ -41,6 +41,8 @@ stages:
     timeoutInMinutes: 1
     steps:
     - script: echo Publish!
+  dependsOn: Build
+  condition: succeeded()
   
 - stage: Test
   dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
