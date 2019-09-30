@@ -1,0 +1,71 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Checkout
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Checking out!
+
+- stage: CustomCodeCheck
+  displayName: 'Custom Code Check'
+  jobs:
+  - job: Check
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Check!
+
+- stage: StandardValidation
+  displayName: 'Standard Validation'
+  jobs:
+  - job: Validation
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Validation!
+  
+- stage: Package
+  jobs:
+  - job: Package
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Package!
+
+- stage: Publish
+  jobs:
+  - job: Publish
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Publish!
+  dependsOn: Build
+  condition: succeeded()
+  
+- stage: Test
+  dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
+  jobs:
+  - job: TestWin
+    displayName: 'Test on Windows'
+    timeoutInMinutes: 1
+    steps:
+      - script: echo Testing on Windows!
+  - job: TestLinux
+    displayName: 'Test on Linux'
+    timeoutInMinutes: 1
+    steps:
+      - script: echo Testing on Linux!
+  - job: TestMac
+    displayName: 'Test on Mac'
+    timeoutInMinutes: 1
+    steps:
+      - script: echo Testing on Mac!
+
+- stage: Notification
+  jobs:
+  - job: Notification
+    timeoutInMinutes: 1
+    steps:
+    - script: echo Notification!
