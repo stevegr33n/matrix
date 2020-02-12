@@ -1,3 +1,3 @@
-# matrix-esque screensaver written in vanilla javascript  
+# A matrix-esque screensaver written in vanilla javascript  
 
 ![alt text](screenCapture.gif)
